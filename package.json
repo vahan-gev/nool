@@ -1,0 +1,19 @@
+{
+  "name": "nool",
+  "version": "1.0.0",
+  "description": "NOOL Language",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "c8 node test/compiler.test.js"
+  },
+  "keywords": [],
+  "author": "Vahan Gevorgyan, Sona Sargsyan",
+  "license": "MIT",
+  "dependencies": {
+    "ohm-js": "^17.1.0"
+  },
+  "devDependencies": {
+    "c8": "^10.1.3"
+  }
+}
