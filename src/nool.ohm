@@ -1,0 +1,99 @@
+NoolLanguage {
+        Program = (Statement | comment)+
+        Statement = "echo" "(" Exp ")" ";"                              --print
+                | import string ";"                                     --import
+                | "stat" ident "=" Exp ";"                              --declare
+                | ident "=" Exp ";"                                     --assignval
+                | ident "=" ident ";"                                   --assignvar
+                | "encounter" "(" Exp ")" Block ElseIf* Else?           --ifelse
+                | "quest" "(" Exp ")" Block                             --while
+                | function ident "(" ListOf<Exp, ","> ")" Block         --function
+                | CallExp ";"                                           --functioncall
+                | repeat num Block                                      --repeatloop
+                | return Exp ";"                                        --return
+                | "escape" ";"                                          --break
+                | "class" ident "{" ClassMember* "}"                    --classdef
+                | AssignableExp "=" Exp ";"                             --propertyAssign
+                | "switch" "(" PrimaryExp ")" SwitchBlock               --switch
+
+        SwitchBlock = "{" CaseStatement+ "}"
+        CaseStatement = case PrimaryExp Block --case 
+                     | default Block --default
+        case = "case" ~alnum
+        default = "default" ~alnum
+
+        ClassMember =
+            function ident "(" ListOf<Exp, ","> ")" Block --method
+            | ident "=" Exp ";" --property
+
+        ElseIf = "alternative" "(" Exp ")" Block
+        Else = "fallback" Block
+    
+        Exp = LogicExp
+
+        LogicExp = LogicExp "&&" CompExp    --and
+                | LogicExp "||" CompExp     --or
+                | CompExp
+
+        CompExp = CompExp "<" AddExp        --lt
+                | CompExp ">" AddExp        --gt
+                | CompExp "<=" AddExp       --le
+                | CompExp ">=" AddExp       --ge
+                | CompExp "==" AddExp       --eq
+                | CompExp "!=" AddExp       --ne
+                | AddExp
+
+        AddExp = AddExp "+" MulExp          --plus
+                | AddExp "-" MulExp         --minus
+                | MulExp
+        
+        MulExp = MulExp "*" UnaryExp        --mult
+                | MulExp "/" UnaryExp       --div
+                | MulExp "%" UnaryExp       --mod
+                | UnaryExp
+        
+        UnaryExp = "-" UnaryExp             --negative
+                | PrimaryExp
+        
+        PrimaryExp = num
+                | "(" Exp ")"                              --parens
+                | "[" ListOf<Exp, ","> "]"                 --arrayDefine
+                | CallExp                                  --call
+                | ChainedExp                               --chained
+                | "new" ident "(" ListOf<Exp, ","> ")"     --newInstance
+                | ident instanceof ident                   --instanceof
+                | ObjectBlock                              --objectBlock
+                | string
+                | ident
+                | bool
+        
+
+        AssignableExp = ident AccessSegment+              --chained
+                     | ident                              --simple
+        ChainedExp = PrimaryExp AccessSegment+
+        AccessSegment = ArrayAccess                        --arrayAccess
+                     | "." ident                           --propertyAccess
+                     
+        CallExp = ident "(" ListOf<Exp, ","> ")"                        --simplecall
+                | ChainedExp "(" ListOf<Exp, ","> ")"                   --chainedcall
+                      
+        ObjectBlock = "{" ListOf<ObjectParameter, ","> "}"
+        ObjectParameter = ident ":" PrimaryExp
+        ArrayAccess = "[" Exp "]"
+        
+        num = digit+ ("." digit+)?
+        import = "import" ~alnum
+        string = "\"" (~"\"" any)* "\""
+        ident = letter (letter | digit)*
+        function = "skill" ~alnum
+        return = "reward" ~alnum
+        instanceof = "instanceof" ~alnum
+        true = "true" ~alnum
+        false = "false" ~alnum
+        bool = true                                   --true
+                | false                               --false
+        comment = "/*" (~"*/" any)* "*/"              --multiLine
+        repeat = "repeat" ~alnum
+        Block = "{" (Statement | comment)+ "}"
+        space += "//" (~"\n" any)*                    --comment
+}

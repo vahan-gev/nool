@@ -11,15 +11,15 @@ class Person {
   name = "";
   age = 0;
 
-  skill constructor(name, age) {
-    this.name = name;
-    this.age = age;
+  skill constructor(newName, newAge) {
+    this.name = newName;
+    this.age = newAge;
   }
 
   skill sayHello() {
-    echo("Hello, I'm " + this.name + " and I'm " + this.age + " years old.");
+    echo("Hello, my name is " + this.name + ". I am " + this.age + " years old!");
   }
 }
 
-stat human = new Person("Name");
-echo(human);
+stat human = new Person("Felix", 20);
+human.sayHello();
