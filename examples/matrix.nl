@@ -13,7 +13,7 @@ stat matrix = [
   [7, 8, 9]
 ];
 
-skill printMatrix(matrix) {
+skill printMatrix(matrix: [[int]]): void {
   stat i = 0;
   stat j = 0;
   quest (i < length(matrix)) {

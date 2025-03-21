@@ -7,17 +7,13 @@
 
 */
 
-skill checkIfEven(number) {
-  encounter (number % 2 == 0) {
+skill checkIfEven(number: int): boolean {
+  encounter(number % 2 == 0) {
     reward true;
   } fallback {
     reward false;
   }
 }
 
-stat num = int(input("Enter a number: "));
-encounter (checkIfEven(num)) {
-  echo("Number " + num + " is Even");
-} fallback {
-  echo("Number " + num + " is Odd");
-}
+echo(checkIfEven(4)); // Output: true
+echo(checkIfEven(5)); // Output: false

@@ -8,18 +8,14 @@
 */
 
 class Person {
-  name = "";
-  age = 0;
+  name: string;
+  age: int;
 
-  skill constructor(newName, newAge) {
-    this.name = newName;
-    this.age = newAge;
-  }
-
-  skill sayHello() {
-    echo("Hello, my name is " + this.name + ". I am " + this.age + " years old!");
+  skill sayHello(): string {
+    reward "Hello, my name is " + this.name + " and I am " + this.age + " years old.";
   }
 }
 
-stat human = new Person("Felix", 20);
-human.sayHello();
+stat human = Person("Felix", 20);
+
+echo(human.sayHello()); // Output: Hello, my name is Felix and I am 20 years old.

@@ -7,7 +7,7 @@
 
 */
 
-skill fibonacci(n) {
+skill fibonacci(n: int): int {
   stat fib = [0, 1];
   stat i = 2;
   stat newValue = 0;
@@ -16,7 +16,8 @@ skill fibonacci(n) {
     push(fib, newValue);
     i = i + 1;
   }
-  reward fib[-1];
+  reward fib[length(fib) - 1];
 }
 
-echo(fibonacci(10)); // 55
+echo(fibonacci(n)); // Output: 55
+

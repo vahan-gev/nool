@@ -4,14 +4,15 @@ import compile from "./compiler.js";
 
 const help = `Nool compiler
 
-  Syntax: nool <filename> <outputType>
+Syntax: nool <filename> <outputType>
 
-  Prints to stdout according to <outputType>, which must be one of:
+Prints to stdout according to <outputType>, which must be one of:
 
   parsed     a message that the program was matched ok by the grammar
   analyzed   the statically analyzed representation
   optimized  the optimized semantically analyzed representation
   js         the translation to JavaScript
+  generate   generates a JavaScript file
 `;
 
 async function compileFromFile(filename, outputType) {

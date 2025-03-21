@@ -4,6 +4,9 @@
 
 NOOL is a programming language designed to make coding more intuitive and engaging for gamers. It introduces game-inspired syntax and concepts to simplify software development, allowing developers to write code that feels more natural and expressive. With RPG-themed keywords and a flexible structure, NOOL aims to reduce complexity while maintaining powerful programming capabilities.
 
+## Website
+[Our website](https://sona-sar.github.io/nool-web/)
+
 ## Features
 
 - Variables: Storage locations for data
@@ -21,7 +24,7 @@ NOOL is a programming language designed to make coding more intuitive and engagi
 
 1. A loop that will print "Hello, World!" 5 times
 ```
-repeat 5 {
+repeat(5) {
   echo("Hello, World!");
 }
 ```
@@ -45,7 +48,7 @@ quest(index < length(arr)) {
 }
 ```
 
-4. A function that will ask for a number and determine if it is even or odd
+1. A function that will determine if a number is even or odd
 ```
 skill checkIfEven(number) {
   encounter (number % 2 == 0) {
@@ -55,12 +58,7 @@ skill checkIfEven(number) {
   }
 }
 
-stat num = int(input("Enter a number: "));
-encounter (checkIfEven(num)) {
-  echo("Number " + num + " is Even");
-} fallback {
-  echo("Number " + num + " is Odd");
-}
+echo(checkIfEven(5));
 ```
 
 5. A program that will calculate the nth Fibonacci number using while loop
@@ -80,17 +78,18 @@ skill fibonacci(n) {
 echo(fibonacci(10)); // 55
 ```
 
-6. A program that will solve the Towers of Hanoi puzzle
+6. A simple example of how classes work
 ```
-skill towerOfHanoi(n, source, target, auxiliary) {
-  encounter (n > 0) {
-    towerOfHanoi(n - 1, source, auxiliary, target);
+class Person {
+  name: string;
+  age: int;
 
-    echo("Move disk " + n + " from " + source + " to " + target);
-
-    towerOfHanoi(n - 1, auxiliary, target, source);
+  skill sayHello(): string {
+    reward "Hello, my name is " + this.name + " and I am " + this.age + " years old.";
   }
 }
 
-towerOfHanoi(3, "A", "C", "B");
+stat human = Person("Felix", 20);
+
+echo(human.sayHello());
 ```
