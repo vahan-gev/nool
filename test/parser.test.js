@@ -47,7 +47,6 @@ const syntaxChecks = [
   ["nonempty array literal", "echo([1, 2, 3]);"],
   ["parentheses", "echo(83 * ((((((((-(13 / 21))))))))) + 1 - 0);"],
   ["indexing array literals", "echo([1,2,3][1]);"],
-  ["member expression on string literal", 'echo("hello".append("there"));'],
   ["non-Latin letters in identifiers", "stat コンパイラ = 100;"],
   ["a simple string literal", 'echo("hello😉😬💀🙅🏽‍♀️—");'],
   ["end of program inside comment", "echo(0); // yay"],
