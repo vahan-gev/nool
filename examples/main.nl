@@ -1,18 +1,8 @@
-class Vector2 {
-  x: int;
-  y: int;
-
-  skill sum(): int {
-    reward this.x + this.y;
+skill factorial(n: int): int {
+  encounter(n <= 0) {
+    reward 1;
   }
+  reward n * factorial(n - 1);
 }
 
-class Human {
-  name: string;
-  coordinate: Vector2;
-}
-
-stat testCoord = Vector2(3, 4);
-stat testHuman = Human("Alice", testCoord);
-
-echo(testHuman.coordinate.sum()); // Output: 7
+echo(factorial(5)); // Output: 120

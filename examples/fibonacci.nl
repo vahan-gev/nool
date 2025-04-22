@@ -19,5 +19,6 @@ skill fibonacci(n: int): int {
   reward fib[length(fib) - 1];
 }
 
-echo(fibonacci(n)); // Output: 55
+echo(fibonacci(5)); // Output: 5
+echo(fibonacci(10)); // Output: 55
 
