@@ -160,6 +160,14 @@ export default function generate(program) {
         )} + 1)) + ${gen(e.left)}`;
       }
 
+      if (e.op === "writeFile") {
+        if (!output.includes("import * as fs from 'fs';")) {
+          output.push("import * as fs from 'fs';");
+        }
+        output.push(`fs.writeFileSync(${gen(e.left)}, ${gen(e.right)});`);
+        return true;
+      }
+
       const op = { "==": "===", "!=": "!==" }[e.op] ?? e.op;
       return `(${gen(e.left)} ${op} ${gen(e.right)})`;
     },
@@ -184,6 +192,25 @@ export default function generate(program) {
       if (e.op === "toFloat") {
         return `parseFloat(${operand})`;
       }
+      if (e.op === "readFile") {
+        if (!output.includes("import * as fs from 'fs';")) {
+          output.push("import * as fs from 'fs';");
+        }
+        return `fs.readFileSync(${operand}, 'utf8')`;
+      }
+      if (e.op === "input") {
+        if (!output.includes("import * as fs from 'fs';")) {
+          output.push("import * as fs from 'fs';");
+        }
+        output.push(`process.stdout.write(${operand});`);
+        output.push(`const buffer = Buffer.alloc(1024);`);
+        output.push(
+          `const bytesRead = fs.readSync(0, buffer, 0, buffer.length, null);`
+        );
+
+        return `buffer.toString('utf8', 0, bytesRead).trim();`;
+      }
+
       return `${e.op}(${operand})`;
     },
 

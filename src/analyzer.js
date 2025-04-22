@@ -583,14 +583,14 @@ export default function analyze(match) {
       return expression.rep();
     },
 
-    Exp7_subscript(exp1, _open, exp2, _close) {
+    Exp7_access_subscript(exp1, _open, exp2, _close) {
       const [array, subscript] = [exp1.rep(), exp2.rep()];
       mustHaveAnArrayType(array, { at: exp1 });
       mustHaveIntegerType(subscript, { at: exp2 });
       return core.subscript(array, subscript);
     },
 
-    Exp7_member(exp, dot, id) {
+    Exp7_access_member(exp, dot, id) {
       const object = exp.rep();
       let classType;
       mustHaveAClassType(object, { at: exp });
@@ -606,15 +606,18 @@ export default function analyze(match) {
     Exp7_call(exp, open, expList, _close) {
       const callee = exp.rep();
       mustBeCallable(callee, { at: exp });
+
       const exps = expList.asIteration().children;
       const targetTypes =
         callee?.kind === "ClassType"
           ? callee.fields.map((f) => f.type)
           : callee.type.paramTypes;
+
       const methodCount =
         callee?.kind === "ClassType"
           ? callee.fields.filter((f) => f.isMethod).length
           : 0;
+
       mustHaveCorrectArgumentCount(
         exps.length,
         targetTypes.length - methodCount,
@@ -632,7 +635,7 @@ export default function analyze(match) {
         : core.functionCall(callee, args);
     },
 
-    Exp7_id(id) {
+    Exp7_access_id(id) {
       // When an id appears in an expression, it had better have been declared
       const entity = context.lookup(id.sourceString);
       if (!entity && id.sourceString === "this") {

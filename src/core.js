@@ -165,7 +165,7 @@ const arrayAnyTypeToIntType = functionType([arrayType(anyType)], intType);
 const arrayAnyTypeToAnyType = functionType([arrayType(anyType)], anyType);
 const intTypeIntTypeToIntType = functionType([intType, intType], intType);
 const anyTypeToStringType = functionType([anyType], stringType);
-const floatTypeToIntType = functionType([floatType], intType);
+const anyTypeToIntType = functionType([anyType], intType);
 const intTypeToFloatType = functionType([intType], floatType);
 export const standardLibrary = Object.freeze({
   int: intType,
@@ -187,8 +187,17 @@ export const standardLibrary = Object.freeze({
   length: intrinsicFunction("length", arrayAnyTypeToIntType),
   randomInt: intrinsicFunction("randomInt", intTypeIntTypeToIntType),
   toString: intrinsicFunction("toString", anyTypeToStringType),
-  toInt: intrinsicFunction("toInt", floatTypeToIntType),
+  toInt: intrinsicFunction("toInt", anyTypeToIntType),
   toFloat: intrinsicFunction("toFloat", intTypeToFloatType),
+  readFile: intrinsicFunction(
+    "readFile",
+    functionType([stringType], stringType)
+  ),
+  writeFile: intrinsicFunction(
+    "writeFile",
+    functionType([stringType, stringType], booleanType)
+  ),
+  input: intrinsicFunction("input", functionType([stringType], stringType)),
 });
 
 // We want every expression to have a type property. But we aren't creating

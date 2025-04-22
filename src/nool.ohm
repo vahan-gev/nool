@@ -60,15 +60,17 @@ Nool {
           | false ~mut
           | floatlit ~mut
           | intlit ~mut
-          | Exp7 "(" ListOf<Exp, ","> ")" ~mut --call
-          | Exp7 "[" Exp "]" --subscript
-          | Exp7 "." id --member
           | stringlit ~mut
-          | id --id
+          | Exp7_access "(" ListOf<Exp, ","> ")" ~mut --call
+          | Exp7_access
           | Type_array "(" ")" ~mut --emptyarray
           | "[" NonemptyListOf<Exp, ","> "]" ~mut --arrayexp
           | "(" Exp ")" ~mut --parens
           
+     Exp7_access = Exp7 "." id --member
+            | Exp7 "[" Exp "]" --subscript
+            | id --id
+     
      intlit = digit+
      floatlit = digit+ "." digit+ (("E" | "e") ("+" | "-")? digit+)?
      stringlit = "\"" char* "\""

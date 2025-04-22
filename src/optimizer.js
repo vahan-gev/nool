@@ -128,12 +128,7 @@ const optimizers = {
     e.op = optimize(e.op);
     e.left = optimize(e.left);
     e.right = optimize(e.right);
-    if (e.op === "??") {
-      // Coalesce empty optional unwraps
-      if (e.left?.kind === "EmptyOptional") {
-        return e.right;
-      }
-    } else if (e.op === "&&") {
+    if (e.op === "&&") {
       // Optimize boolean constants in && and ||
       if (e.left === true) return e.right;
       if (e.right === true) return e.left;
@@ -193,7 +188,6 @@ const optimizers = {
     return e;
   },
   FunctionCall(c) {
-    c.callee = optimize(c.callee);
     c.args = c.args.map(optimize);
     return c;
   },
