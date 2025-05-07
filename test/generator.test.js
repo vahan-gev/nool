@@ -178,13 +178,305 @@ const fixtures = [
       }
     `,
   },
+  {
+    name: "taking an input",
+    source: `
+      stat x = input("Enter a number: ");
+      echo(x);
+    `,
+    expected: dedent`
+      import * as fs from 'fs';
+      
+      function getNoolInput(prompt) { // NOOL_INPUT_FUNCTION_DEFINITION
+        process.stdout.write(prompt);
+        const buffer = Buffer.alloc(1024);
+        const bytesRead = fs.readSync(0, buffer, 0, buffer.length, null);
+        return buffer.toString('utf8', 0, bytesRead).trim();
+      }
+      let x_1 = getNoolInput("Enter a number: ");
+      console.log(x_1);
+    `,
+  },
+  {
+    name: "writing to a file",
+    source: `
+      stat x = "hello";
+      writeFile("output.txt", x);
+    `,
+    expected: dedent`
+      let x_1 = "hello";
+      import * as fs from 'fs';
+      fs.writeFileSync("output.txt", x_1);
+    `,
+  },
+  {
+    name: "reading from a file",
+    source: `
+      stat x = readFile("input.txt");
+      echo(x);
+    `,
+    expected: dedent`
+      import * as fs from 'fs';
+      let x_1 = fs.readFileSync("input.txt", 'utf8');
+      console.log(x_1);
+    `,
+  },
+  {
+    name: "randomInt",
+    source: `
+      stat x = randomInt(1, 10);
+      echo(x);
+    `,
+    expected: dedent`
+      let x_1 = Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+      console.log(x_1);
+    `,
+  },
+  {
+    name: "pop",
+    source: `
+      stat x = [1, 2, 3];
+      stat y = pop(x);
+      echo(y);
+    `,
+    expected: dedent`
+      let x_1 = [1,2,3];
+      let y_2 = x_1.pop();
+      console.log(y_2);
+    `,
+  },
+  {
+    name: "push",
+    source: `
+      stat x = [1, 2, 3];
+      push(x, 4);
+      echo(x);
+    `,
+    expected: dedent`
+      let x_1 = [1,2,3];
+      x_1.push(4);
+      console.log(x_1);
+    `,
+  },
+  {
+    name: "hypot",
+    source: `
+      stat x = hypot(3.0, 4.0);
+      echo(x);
+    `,
+    expected: dedent`
+      let x_1 = Math.hypot(3,4);
+      console.log(x_1);
+    `,
+  },
+  {
+    name: "π",
+    source: `
+      stat x = π;
+      echo(x);
+    `,
+    expected: dedent`
+      let x_1 = Math.PI;
+      console.log(x_1);
+    `,
+  },
+  {
+    name: "toString",
+    source: `
+      stat x = 3;
+      stat y = toString(x);
+      echo(y);
+    `,
+    expected: dedent`
+      let x_1 = 3;
+      let y_2 = '' + x_1;
+      console.log(y_2);
+    `,
+  },
+  {
+    name: "toInt",
+    source: `
+      stat x = "3";
+      stat y = toInt(x);
+      echo(y);
+    `,
+    expected: dedent`
+      let x_1 = "3";
+      let y_2 = Math.floor(x_1);
+      console.log(y_2);
+    `,
+  },
+  {
+    name: "toFloat",
+    source: `
+      stat x = 3;
+      stat y = toFloat(x);
+      echo(y);
+    `,
+    expected: dedent`
+      let x_1 = 3;
+      let y_2 = parseFloat(x_1);
+      console.log(y_2);
+    `,
+  },
+  {
+    name: "class",
+    source: `
+      class S {
+        x: int;
+      }
+      stat x = S(3);
+      echo(x.x);
+    `,
+    expected: dedent`
+      class S_1 {
+      constructor(x_2) {
+      this["x_2"] = x_2;
+      }
+      }
+      let x_3 = new S_1(3);
+      console.log((x_3["x_2"]));
+    `,
+  },
+  {
+    name: "class-with-methods",
+    source: `
+      class Calculator {
+        value: int;
+        skill add(x: int): int {
+          reward this.value + x;
+        }
+      }
+      stat calc = Calculator(5);
+      echo(calc.add(3));
+    `,
+    expected: dedent`
+      class Calculator_1 {
+      constructor(value_2) {
+      this["value_2"] = value_2;
+      this["add_3"] = (x_4) => {
+      return ((this["value_2"]) + x_4);
+      };
+      }
+      }
+      let calc_5 = new Calculator_1(5);
+      console.log((calc_5["add_3"])(3));
+    `,
+  },
+  {
+    name: "spread",
+    source: `
+      stat x = [1, 2, 3];
+      stat y = [...x];
+      echo(y);
+    `,
+    expected: dedent`
+      let x_1 = [1,2,3];
+      let y_2 = [...x_1];
+      console.log(y_2);
+    `,
+  },
+  {
+    name: "sin",
+    source: `
+      stat x = sin(3.0);
+      echo(x);
+    `,
+    expected: dedent`
+      let x_1 = Math.sin(3);
+      console.log(x_1);
+    `,
+  },
+  {
+    name: "cos",
+    source: `
+      stat x = cos(3.0);
+      echo(x);
+    `,
+    expected: dedent`
+      let x_1 = Math.cos(3);
+      console.log(x_1);
+    `,
+  },
+  {
+    name: "exp",
+    source: `
+      stat x = exp(3.0);
+      echo(x);
+    `,
+    expected: dedent`
+      let x_1 = Math.exp(3);
+      console.log(x_1);
+    `,
+  },
+  {
+    name: "ln",
+    source: `
+      stat x = ln(3.0);
+      echo(x);
+    `,
+    expected: dedent`
+      let x_1 = Math.log(3);
+      console.log(x_1);
+    `,
+  },
+  {
+    name: "length",
+    source: `
+      stat x = [1, 2, 3];
+      stat y = length(x);
+      echo(y);
+    `,
+    expected: dedent`
+      let x_1 = [1,2,3];
+      let y_2 = x_1.length;
+      console.log(y_2);
+    `,
+  },
+  {
+    name: "toLowerCase",
+    source: `
+      stat x = "HELLO";
+      stat y = toLowerCase(x);
+      echo(y);
+    `,
+    expected: dedent`
+      let x_1 = "HELLO";
+      let y_2 = x_1.toLowerCase();
+      console.log(y_2);
+    `,
+  },
+  {
+    name: "toUpperCase",
+    source: `
+      stat x = "hello";
+      stat y = toUpperCase(x);
+      echo(y);
+    `,
+    expected: dedent`
+      let x_1 = "hello";
+      let y_2 = x_1.toUpperCase();
+      console.log(y_2);
+    `,
+  },
+  {
+    name: "nool",
+    source: `
+      stat x = nool;
+      echo(x);
+    `,
+    expected: dedent`
+      let x_1 = null;
+      console.log(x_1);
+    `,
+  },
 ];
 
 describe("The code generator", () => {
   for (const fixture of fixtures) {
     it(`produces expected js output for the ${fixture.name} program`, () => {
       const actual = generate(optimize(analyze(parse(fixture.source))));
-      assert.deepEqual(actual, fixture.expected);
+      assert.deepEqual(dedent(actual), fixture.expected);
     });
   }
 });

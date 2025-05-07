@@ -10,8 +10,6 @@ import {
   floatType,
 } from "../src/core.js";
 
-// CHANGE THE IF STATEMENT TO ENCOUNTER, ELSE TO FALLBACK, PRINT TO ECHO
-
 // Programs that are semantically correct
 const semanticChecks = [
   ["variable declarations", 'const x = 1; stat y = "false";'],
@@ -84,6 +82,7 @@ const semanticChecks = [
   ["built-in sin", "echo(sin(π));"],
   ["built-in cos", "echo(cos(93.999));"],
   ["built-in hypot", "echo(hypot(-4.0, 3.00001));"],
+  ["multiline comments", "/* this is a comment */ stat x = 1;"],
 ];
 
 // Programs that are syntactically correct but have semantic errors
@@ -226,6 +225,18 @@ const semanticErrors = [
     "stat x=1;skill f():x{reward 1;}",
     /Type expected/,
   ],
+  [
+    "assign to immutable member",
+    `
+    class Point {
+      x: int;
+      y: int;
+    }
+    const p = Point(10, 20);
+    p.x = 30;
+  `,
+    /Cannot assign to immutable/,
+  ],
 ];
 
 describe("The analyzer", () => {
@@ -248,6 +259,27 @@ describe("The analyzer", () => {
           binary("+", variable("π", false, floatType), 2.2, floatType)
         ),
       ])
+    );
+  });
+
+  it("tests nested class types in includesAsField function", () => {
+    assert.throws(
+      () =>
+        analyze(
+          parse(`
+      class Inner {
+        x: int;
+      }
+      class Middle {
+        inner: Inner;
+      }
+      class Outer {
+        middle: Middle;
+        outer: Outer;
+      }
+    `)
+        ),
+      /Class type must not be self-containing/
     );
   });
 });

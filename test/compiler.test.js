@@ -1,6 +1,8 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import compile from "../src/compiler.js";
+import * as fs from "fs";
+import * as path from "path";
 
 const sampleProgram = "echo(0);";
 
@@ -29,5 +31,16 @@ describe("The compiler", () => {
   it("generates js code when given the js option", () => {
     const compiled = compile(sampleProgram, "js");
     assert(compiled.startsWith("console.log(0)"));
+  });
+  it("generates js code when given the generate option", () => {
+    const folderPath = path.join("generated");
+    if (fs.existsSync(folderPath)) {
+      fs.rmSync(folderPath, { recursive: true, force: true });
+    }
+
+    const compiled = compile(sampleProgram, "generate");
+    assert(compiled.startsWith("Generated JavaScript code written to"));
+
+    assert(fs.existsSync(folderPath));
   });
 });
