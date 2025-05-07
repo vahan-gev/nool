@@ -87,9 +87,9 @@ export default function analyze(match) {
     must(e.type?.kind === "ArrayType", "Expected an array", at);
   }
 
-  function mustHaveAnOptionalType(e, at) {
-    must(e.type?.kind === "OptionalType", "Expected an optional", at);
-  }
+  // function mustHaveAnOptionalType(e, at) {
+  //   must(e.type?.kind === "OptionalType", "Expected an optional", at);
+  // }
 
   function mustHaveAClassType(e, at) {
     must(e.type?.kind === "ClassType", "Expected a class", at);
@@ -131,7 +131,7 @@ export default function analyze(match) {
     return classType.fields.some(
       (field) =>
         field.type === type ||
-        (field.type?.kind === "ClassType" && includesAsField(field.type, type))
+        (field.type.kind === "ClassType" && includesAsField(field.type, type))
     );
   }
 
@@ -143,9 +143,6 @@ export default function analyze(match) {
   function equivalent(t1, t2) {
     return (
       t1 === t2 ||
-      (t1?.kind === "OptionalType" &&
-        t2?.kind === "OptionalType" &&
-        equivalent(t1.baseType, t2.baseType)) ||
       (t1?.kind === "ArrayType" &&
         t2?.kind === "ArrayType" &&
         equivalent(t1.baseType, t2.baseType)) ||
@@ -178,15 +175,15 @@ export default function analyze(match) {
 
   function typeDescription(type) {
     if (typeof type === "string") return type;
-    if (type.kind == "ClassType") return type.name;
+    // if (type.kind == "ClassType") return type.name;
     if (type.kind == "FunctionType") {
       const paramTypes = type.paramTypes.map(typeDescription).join(", ");
       const returnType = typeDescription(type.returnType);
       return `(${paramTypes})->${returnType}`;
     }
     if (type.kind == "ArrayType") return `[${typeDescription(type.baseType)}]`;
-    if (type.kind == "OptionalType")
-      return `${typeDescription(type.baseType)}?`;
+    // if (type.kind == "OptionalType")
+    //   return `${typeDescription(type.baseType)}?`;
   }
 
   function mustBeAssignable(e, { toType: type }, at) {

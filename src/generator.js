@@ -76,6 +76,7 @@ export default function generate(program) {
     Variable(v) {
       // Standard library constants get special treatment
       if (v === standardLibrary.π) return "Math.PI";
+      if (v === standardLibrary.nool) return "null";
       return targetName(v);
     },
     Function(f) {
@@ -198,17 +199,31 @@ export default function generate(program) {
         }
         return `fs.readFileSync(${operand}, 'utf8')`;
       }
+      if (e.op === "toLowerCase") {
+        return `${operand}.toLowerCase()`;
+      }
+      if (e.op === "toUpperCase") {
+        return `${operand}.toUpperCase()`;
+      }
       if (e.op === "input") {
         if (!output.includes("import * as fs from 'fs';")) {
           output.push("import * as fs from 'fs';");
         }
-        output.push(`process.stdout.write(${operand});`);
-        output.push(`const buffer = Buffer.alloc(1024);`);
-        output.push(
-          `const bytesRead = fs.readSync(0, buffer, 0, buffer.length, null);`
-        );
+        if (
+          !output.some((line) =>
+            line.includes("// NOOL_INPUT_FUNCTION_DEFINITION")
+          )
+        ) {
+          output.push(`
+          function getNoolInput(prompt) { // NOOL_INPUT_FUNCTION_DEFINITION
+            process.stdout.write(prompt);
+            const buffer = Buffer.alloc(1024);
+            const bytesRead = fs.readSync(0, buffer, 0, buffer.length, null);
+            return buffer.toString('utf8', 0, bytesRead).trim();
+          }`);
+        }
 
-        return `buffer.toString('utf8', 0, bytesRead).trim();`;
+        return `getNoolInput(${operand})`;
       }
 
       return `${e.op}(${operand})`;
@@ -226,8 +241,7 @@ export default function generate(program) {
     MemberExpression(e) {
       const object = gen(e.object);
       const field = JSON.stringify(gen(e.field));
-      const chain = e.op === "." ? "" : e.op;
-      return `(${object}${chain}[${field}])`;
+      return `(${object}[${field}])`;
     },
     FunctionCall(c) {
       const targetCode = `${gen(c.callee)}(${c.args.map(gen).join(", ")})`;

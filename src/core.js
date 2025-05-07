@@ -166,6 +166,7 @@ const arrayAnyTypeToAnyType = functionType([arrayType(anyType)], anyType);
 const intTypeIntTypeToIntType = functionType([intType, intType], intType);
 const anyTypeToStringType = functionType([anyType], stringType);
 const anyTypeToIntType = functionType([anyType], intType);
+const stringTypetoStringType = functionType([stringType], stringType);
 const intTypeToFloatType = functionType([intType], floatType);
 export const standardLibrary = Object.freeze({
   int: intType,
@@ -175,6 +176,7 @@ export const standardLibrary = Object.freeze({
   void: voidType,
   any: anyType,
   π: variable("π", false, floatType),
+  nool: variable("nool", false, anyType),
   echo: intrinsicFunction("echo", anyToVoidType),
   sqrt: intrinsicFunction("sqrt", floatToFloatType),
   sin: intrinsicFunction("sin", floatToFloatType),
@@ -189,6 +191,8 @@ export const standardLibrary = Object.freeze({
   toString: intrinsicFunction("toString", anyTypeToStringType),
   toInt: intrinsicFunction("toInt", anyTypeToIntType),
   toFloat: intrinsicFunction("toFloat", intTypeToFloatType),
+  toLowerCase: intrinsicFunction("toLowerCase", stringTypetoStringType),
+  toUpperCase: intrinsicFunction("toUpperCase", stringTypetoStringType),
   readFile: intrinsicFunction(
     "readFile",
     functionType([stringType], stringType)
